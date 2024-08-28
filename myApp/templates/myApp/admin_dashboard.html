@@ -1,0 +1,194 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'images/logos/seodashlogo.png' %}" />
+  <link rel="stylesheet" href="{% static 'css/styles.min.css' %}" />
+  <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'libs/apexcharts/dist/apexcharts.min.js' %}"></script>
+  <script src="{% static 'libs/simplebar/dist/simplebar.js' %}"></script>
+  <script src="{% static 'js/sidebarmenu.js' %}"></script>
+  <script src="{% static 'js/app.min.js' %}"></script>
+  <script src="{% static 'js/dashboard.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <aside class="left-sidebar">
+      <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+          <a href="./index.html" class="text-nowrap logo-img">
+            <h3><i class="fas fa-seedling"></i> <span style="color:#1cc88a">AgroMarketPro</span></h3>
+
+          </a>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <i class="ti ti-x fs-8"></i>
+          </div>
+        </div>
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+          <ul id="sidebarnav">
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-6"></i>
+              <span class="hide-menu">Home</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'admin_dashboards' %}" aria-expanded="false">
+                <span>
+                  <iconify-icon icon="solar:home-smile-bold-duotone" class="fs-6"></iconify-icon>
+                </span>
+                <span class="hide-menu">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-6"></i>
+              <span class="hide-menu">Menus</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'listofcooperative' %}" aria-expanded="false">
+                <span>
+                  <iconify-icon icon="solar:layers-minimalistic-bold-duotone" class="fs-6"></iconify-icon>
+                </span>
+                <span class="">Manager Coperative</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'listofseason' %}" aria-expanded="false">
+                <span>
+                  <iconify-icon icon="solar:danger-circle-bold-duotone" class="fs-6"></iconify-icon>
+                </span>
+                <span class="hide-menu">Manager Season</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{%url 'listofaccount'%}" aria-expanded="false">
+                <span>
+                  <iconify-icon icon="solar:bookmark-square-minimalistic-bold-duotone" class="fs-6"></iconify-icon>
+                </span>
+                <span class="hide-menu">Manager Account</span>
+              </a>
+            </li>
+    </aside>
+    <div class="body-wrapper">
+      <header class="app-header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <ul class="navbar-nav">              
+          </ul>
+          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+              <li class="nav-item dropdown">
+                  <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                   <b>Admin</b>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                    <div class="message-body">
+                      <a href="{% url 'logout_user' %}" class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="ti ti-user fs-6"></i>
+                        <p class="mb-0 fs-3">Log Out</p>
+                      </a>
+                    </div>
+                  </div>
+                </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!-- Header End -->
+      <div class="container-fluid  ">
+        <div class="row">   
+          <div class="col-lg-15">
+            <div class="card">
+              <div class="card-body">
+                <h1>Welcome, {{ user.name }} <span style="font-size:20px; color:blue;">Gatera Bosco</span></h1>
+                <div class="row">
+                  <div class="col-md-4">
+                      <div class="card">
+                          <div class="card-body">
+                            {% csrf_token %}
+                              <h5 class="card-title"><i class="fas fa-cogs"></i> Cooparative</h5>
+                              <a href="{% url 'listofcooperative' %}"> <p class="card-text"><b>Manage Cooparative</b></p></a>
+                              <form method="post" class="form-container">
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-cogs"></i> Season</h5>
+                            <a href="{% url 'listofseason' %}"> <p class="card-text"><b>Manage Season</b></p></a>  </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="card">
+                          <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-cogs"></i> Account</h5>
+                              <a href="{% url 'listofaccount' %}"> <p class="card-text"><b>Manage Account </b></p></a>     </div>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4">
+                      <div class="card">
+                          <div class="card-body text-center">
+                              <h5 class="card-title"><i class="fas fa-users"></i> Coperative</h5>
+                              <a href=""><p class="card-text text-center"><b><h3>{{count_cooperatives}}</h3></b></p></a>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="card">
+                          <div class="card-body text-center">
+                              <h5 class="card-title"><i class="fas fa-folder"></i> Session</h5>
+                              <a href=""><p class="card-text "><b><h3>{{seasion.name}}</h3></b></p></a>
+                          </div>
+                      </div>
+                  </div>
+                <div class="row">
+                  <div class="col-lg-8">
+                      <div class="card">
+                          <div class="card-body">
+                              <h5 class="card-title">Coperative Data</h5>
+                            <table class="table text-center table-striped mt-2 ">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th class="text-center">N0</th>
+                                        <th class="text-center">Coperative Name</th>
+                                        <th class="text-center">Coperative Work</th>
+                                        <th class="text-center">Location </th>
+                                        <th class="text-center">Created Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  {% for coperative in allcoperative %}
+                                  <tr>
+                                      <td class="text-center">{{ forloop.counter }}</td>
+                                      <td class="text-center">{{coperative.co_name}}</td>
+                                      <td class="text-center">{{coperative.work}}</td>
+                                      <td class="text-center">{{coperative.location}}</td>
+                                      <td class="text-center">{{coperative.created_at}}</td>
+                                    </tr>
+                                  {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</body>
+</html>

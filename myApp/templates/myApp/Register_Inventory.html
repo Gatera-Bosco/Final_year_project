@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storekeeper Dashboard - {{ co_name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60;
+            --accent-color: #e74c3c;
+            --bg-color: #ecf0f1;
+            --text-color: #34495e;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .sidebar {
+            background-color: var(--primary-color);
+            color: white;
+            height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: white;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        .sidebar .nav-link.active {
+            background-color: var(--secondary-color);
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+        .btn-custom {
+            background-color: var(--secondary-color);
+            border: none;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #219653;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button[type="submit"] {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #219653;
+        }
+    </style>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky">
+                    <div class="brand-logo d-flex align-items-center justify-content-center">
+                        <h3><i class="fas fa-seedling"></i> <span style="color:#1cc88a">AgroMarketPro</span></h3>
+                    </div>
+                     <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'storekeeper_dashboard' %}active{% endif %}" href="{% url 'storekeeper_dashboard' %}">
+                                <i class="fas fa-home me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'list_farmers' %}active{% endif %}" href="{% url 'list_farmers' %}">
+                                <i class="fas fa-chart-bar me-2"></i> Record Farmers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'list_inventory' %}active{% endif %}" href="{% url 'list_inventory' %}">
+                                <i class="fas fa-truck-loading me-2"></i> Record Harvest
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'homesalles' %}active{% endif %}" href="{% url 'homesalles' %}">
+                                <i class="fas fa-truck-loading me-2"></i> Record Selles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'daily_report' %}active{% endif %}" href="{% url 'daily_report' %}">
+                                <i class="fas fa-chart-bar me-2"></i> View Reports
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout_user' %}">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Storekeeper Dashboard</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-5 py-5">
+                    <div class="col-md-8 mx-auto">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0"><i class="fas fa-truck-loading me-2"></i>Welcome Back to Record New Inventory</h5>
+                            </div>  
+                            <div class="card-body">
+                                <form method="post" action="{% url 'record_inventory' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="season_id">Season:</label>
+                                        <select id="season_id" name="season_id" class="form-control" required>
+                                            {% for season in seasons %}
+                                                <option value="{{ season.id }}">{{ season.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="farmer_id">Farmer ID:</label>
+                                        <input type="text" id="farmer_id" name="farmer_id" maxlength="16" class="form-control" required>
+                                        <span id="farmer_id_message" style="color:red; display:none;">Please enter a valid Farmer ID.</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="farmer_name">Farmer Name:</label>
+                                        <input type="text" id="farmer_name" name="farmer_name" readonly class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="product_name">Product Name:</label>
+                                        <select id="product_name" name="product_name" class="form-control" required>
+                                            {% for product in products %}
+                                                <option value="{{ product.id }}">{{ product.p_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="quantity">Quantity:</label>
+                                        <input type="number" id="quantity" name="quantity" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="unit_price">Unit Price:</label>
+                                        <input type="number" id="unit_price" name="unit_price" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-custom">Record Inventory</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#farmer_id').on('input', function() {
+                var farmerId = $(this).val();
+                var farmerIdMessage = $('#farmer_id_message');
+                var farmerNameField = $('#farmer_name');
+
+                if (farmerId.length === 16) { // Assuming the farmer ID should be exactly 16 digits
+                    farmerIdMessage.hide();
+                    $.ajax({
+                        url: '{% url "get_farmer_name" %}',
+                        data: {
+                            'farmer_id': farmerId
+                        },
+                        success: function(data) {
+                            if (data.farmer_name) {
+                                farmerNameField.val(data.farmer_name);
+                            } else {
+                                farmerNameField.val('');
+                                farmerIdMessage.text('Farmer not found.').show();
+                            }
+                        },
+                        error: function() {
+                            farmerNameField.val('');
+                            farmerIdMessage.text('An error occurred. Please try again.').show();
+                        }
+                    });
+                } else {
+                    farmerNameField.val('');
+                    if (farmerId.length > 0) {
+                        farmerIdMessage.text('Please enter a valid Farmer ID.').show();
+                    } else {
+                        farmerIdMessage.hide();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

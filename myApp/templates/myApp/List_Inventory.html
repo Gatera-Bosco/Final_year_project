@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storekeeper Dashboard - {{ co_name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60;
+            --accent-color: #e74c3c;
+            --bg-color: #ecf0f1;
+            --text-color: #34495e;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        .sidebar {
+            background-color: var(--primary-color);
+            color: white;
+            height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: white;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+        }
+        .sidebar .nav-link:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        .sidebar .nav-link.active {
+            background-color: var(--secondary-color);
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+        .btn-custom {
+            background-color: var(--secondary-color);
+            border: none;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #219653;
+        }
+        .table thead th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky">
+                    <div class="brand-logo d-flex align-items-center justify-content-center">
+                        <h3><i class="fas fa-seedling"></i> <span style="color:#1cc88a">AgroMarketPro</span></h3>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'storekeeper_dashboard' %}active{% endif %}" href="{% url 'storekeeper_dashboard' %}">
+                                <i class="fas fa-home me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'list_farmers' %}active{% endif %}" href="{% url 'list_farmers' %}">
+                                <i class="fas fa-user-plus me-2"></i> Record Farmer
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'list_inventory' %}active{% endif %}" href="{% url 'list_inventory' %}">
+                                <i class="fas fa-truck-loading me-2"></i> Record Harvest
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'homesalles' %}active{% endif %}" href="{% url 'homesalles' %}">
+                                <i class="fas fa-truck-loading me-2"></i> Record Selles
+                            </a>
+                        </li>
+                      <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'daily_report' %}active{% endif %}" href="{% url 'daily_report' %}">
+                                <i class="fas fa-truck-loading me-2"></i> View report
+                            </a>
+                        </li>
+                       <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout_user' %}">
+                                <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Storekeeper Dashboard</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        </div>
+                       
+                    </div>
+                </div>
+                 <a href="{% url 'record_inventory' %}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus-circle me-1"></i> Create Inventory
+                        </a>
+                <!-- Inventory List Card -->
+                <div class="row mt-5">
+                    <div class="col-md-12 mb-4">
+                        <div class="card">
+                        
+                            <div class="card-header">
+                                <h5 class="card-title mb-0"><i class="fas fa-list me-2"></i> Inventory List</h5>
+                            </div>
+                            
+                            <div class="card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Season</th>
+                                            <th>Farmer ID</th>
+                                            <th>Farmer Name</th>
+                                            <th>Product Name</th>
+                                            <th>Quantity</th>
+                                            <th>Unit Price</th>
+                                            <th>Registration Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in inventory_items %}
+                                        <tr>
+                                            <td>{{ item.id }}</td>
+                                            <td>{{ item.season_id.name }}</td>
+                                            <td>{{ item.farmer_id }}</td>
+                                            <td>{{ item.farmer_name }}</td>
+                                            <td>{{ item.product_name.p_name }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td>{{ item.unit_price }}</td>
+                                            <td>{{ item.created_at }}</td>
+                                            <td>
+                                                <a href="{% url 'edit_inventory' item.id %}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i>Edit</a>
+                                                <a href="{% url 'receipts' item.id %}" class="btn btn-secondary btn-sm"><i class="fas fa-receipt"></i>Receipt</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

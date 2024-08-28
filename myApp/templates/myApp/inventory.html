@@ -1,0 +1,93 @@
+
+
+<!-- inventory_form.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Inventory</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Add your CSS links or stylesheets -->
+</head>
+<body>
+    <h1>Record Inventory</h1>
+    <form method="post" action="{% url 'record_inventory' %}">
+        {% csrf_token %}
+        <div>
+            <label for="season_id">Season:</label>
+            <select id="season_id" name="season_id" required>
+                {% for season in seasons %}
+                    <option value="{{ season.id }}">{{ season.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="farmer_id">Farmer ID:</label>
+            <input type="text" id="farmer_id" name="farmer_id" maxlength="16" required>
+            <span id="farmer_id_message" style="color:red; display:none;">Please enter a valid Farmer ID.</span>
+        </div>
+        <div>
+            <label for="farmer_name">Farmer Name:</label>
+            <input type="text" id="farmer_name" name="farmer_name" readonly required>
+        </div>
+        <div>
+            <label for="product_name">Product Name:</label>
+            <select id="product_name" name="product_name" required>
+                {% for product in products %}
+                    <option value="{{ product.id }}">{{ product.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required>
+        </div>
+        <div>
+            <label for="unit_price">Unit Price:</label>
+            <input type="number" id="unit_price" name="unit_price" required>
+        </div>
+        <button type="submit">Record Inventory</button>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $('#farmer_id').on('input', function() {
+                var farmerId = $(this).val();
+                var farmerIdMessage = $('#farmer_id_message');
+                var farmerNameField = $('#farmer_name');
+
+                if (farmerId.length === 16) { // Assuming the farmer ID should be exactly 16 digits
+                    farmerIdMessage.hide();
+                    $.ajax({
+                        url: '{% url "get_farmer_name" %}',
+                        data: {
+                            'farmer_id': farmerId
+                        },
+                        success: function(data) {
+                            if (data.farmer_name) {
+                                farmerNameField.val(data.farmer_name);
+                            } else {
+                                farmerNameField.val('');
+                                farmerIdMessage.text('Farmer not found.').show();
+                            }
+                        },
+                        error: function() {
+                            farmerNameField.val('');
+                            farmerIdMessage.text('An error occurred. Please try again.').show();
+                        }
+                    });
+                } else {
+                    farmerNameField.val('');
+                    if (farmerId.length > 0) {
+                        farmerIdMessage.text('Please enter a valid Farmer ID.').show();
+                    } else {
+                        farmerIdMessage.hide();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
